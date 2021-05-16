@@ -43,7 +43,6 @@ void searchBook(int bookId) {
 	
 		while (searchbook != NULL) {
 
-
 			if (searchbook->bookId == bookId) {
 				cout << "Book ID \tBook Title \tGenre \tQuantity \tPrice\n";
 				cout << "" << searchbook->bookId <<
@@ -55,6 +54,7 @@ void searchBook(int bookId) {
 				break;
 			}
 			else {
+				cout << "Book not found!"; // This prints despite records existing. Maybe due to the loop. 
 				searchbook = searchbook->next;
 			}
 
@@ -205,7 +205,6 @@ void displayallbook() {
 	
 	cout << endl;
 	
-	
 }
 
 struct Purchase {
@@ -298,6 +297,7 @@ int main() {
 
 				cout << "Keep searching? 1. Yes 2. No\n\n";
 				cin >> flag;
+				
 			} while (flag == 1);
 			break;
 		}
