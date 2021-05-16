@@ -31,7 +31,36 @@ struct Book {
 
 };
 
-void searchbook() {
+void searchBook(int bookId) {
+
+	//Take keyword and search
+
+	struct Book* searchbook; 
+
+	searchbook = head;
+
+	//Matching the dataset
+	
+		while (searchbook != NULL) {
+
+
+			if (searchbook->bookId == bookId) {
+				cout << "Book ID \tBook Title \tGenre \tQuantity \tPrice\n";
+				cout << "" << searchbook->bookId <<
+					"\t \t" << searchbook->bookTitle <<
+					"\t \t" << searchbook->genre <<
+					"\t \t" << searchbook->quantity <<
+					"\t \t" << searchbook->price << "\n";
+
+				break;
+			}
+			else {
+				searchbook = searchbook->next;
+			}
+
+		}
+
+	cout << endl;
 
 }
 
@@ -44,8 +73,20 @@ void updatebook(/*Book* book, genre, newdata*/) {
 
 }
 
-void sortByQuantity(/*order*/) {
+void sortByQuantity(int order) {
 
+	switch (order) {
+		{
+		case 1:
+			break;	//function for ascending order
+		}
+		
+		{
+		case 2:
+			break;	//function for descending order
+		}
+		
+	}
 	/*int order;
 	cin >> order;*/
 	//Switch function
@@ -247,22 +288,38 @@ int main() {
 		}
 		{
 		case 3:
-			searchbook();
+			int keyword;
+			int flag = 1;
+			do {
+				displayallbook();
+				cout << "Search: \n\n";
+				cin >> keyword;
+				searchBook(keyword);
+
+				cout << "Keep searching? 1. Yes 2. No\n\n";
+				cin >> flag;
+			} while (flag == 1);
 			break;
 		}
+
 		{
 		case 4:
 			filterbook();
 			break;
 		}
+
 		{
 		case 5:
 			updatebook();
 			break;
 		}
+
 		{
 		case 6:
-			sortByQuantity();
+			cout << "Which order would you like to sort it by? 1. Ascending 2. Descending\n\n";
+			int order;
+			cin >> order;
+			sortByQuantity(order);
 			break;
 		}
 		{
