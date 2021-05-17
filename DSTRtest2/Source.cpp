@@ -78,7 +78,110 @@ void filterbook(/*string category*/) {
 
 }
 
-void updatebook(/*Book book, genre, newdata*/) {
+void updatebook() {
+
+	cout << "Update Book Information by ID: " << endl;
+	int bookID;
+	cin >> bookID;
+
+
+	Book* current = head;
+
+	while (current != NULL) {
+		if (current->bookId == bookID) {
+		
+			cout << "___________________________________________________________________________________________\n";
+			cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
+			cout << "-------------------------------------------------------------------------------------------\n";
+			cout << "     " << current->bookId <<
+				"\t \t" << current->bookTitle <<
+				"\t \t" << current->genre <<
+				"\t \t       " << current->quantity <<
+				"\t \t" << current->price << "  " << "\n";
+
+		reupdate:;
+			cout << "\nChoose the field that you want to update:\n";
+			cout << "1. Book Title" << endl;
+			cout << "2. Genre" << endl;
+			cout << "3. Quantity" << endl;
+			cout << "4. Price" << endl;
+			cout << "\n5. Save Changes and Exit to Menu" << endl;
+
+			int choiceupdate;
+			cin >> choiceupdate;
+
+			switch (choiceupdate)
+			{
+			case 1:
+				
+				cout << "Book Title: ";
+				cin.ignore();//make sure during the cin, the getline doesn not take enter as an input 
+				getline(cin, current->bookTitle);
+
+				while (current->bookTitle == "") {
+					cout << "Invalid input\n";
+					cout << "Book Title: ";
+					getline(cin, current->bookTitle);
+				}
+				break;
+			case 2:
+				
+				cout << "Genre :";
+				cin >> current->genre;
+				while (current->genre == "") {
+					cout << "Invalid input\n";
+					cout << "Genre :";
+					cin >> current->genre;
+				}
+				break;
+			case 3:
+				
+				cout << "Quantity :";
+				cin >> current->quantity;
+				while (current->quantity <= 0) {
+					cout << "Invalid input\n";
+					cout << "Quantity :";
+					cin >> current->quantity;
+				}
+				break;
+			case 4:
+				
+				cout << "Price :";
+				cin >> current->price;
+				while (current->price <= 0) {
+					cout << "Invalid input\n";
+					cout << "Price :";
+					cin >> current->price;
+				}
+			case 5:
+				goto main;
+			default:
+				cout << "Wrong choice. Please try again.\n" << endl;
+			}
+
+
+			cout << "___________________________________________________________________________________________\n";
+			cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
+			cout << "-------------------------------------------------------------------------------------------\n";
+			cout << "     " << current->bookId <<
+				"\t \t" << current->bookTitle <<
+				"\t \t" << current->genre <<
+				"\t \t       " << current->quantity <<
+				"\t \t" << current->price << "  " << "\n\n\n\n\n";
+
+			
+			goto reupdate;
+		}
+		else
+		{
+			current = current->next;
+		}
+
+		cout << "\nBook not found.\n";
+	}
+
+main:;
+	main();
 
 }
 
@@ -109,7 +212,7 @@ void sortByQuantity(int order) {
 
 	//Descending order
 }
-//rename it to sort() and remove sortDescending
+// traverse forwards
 void sortAscending() {
 	struct Book* current = NULL, * index = NULL;
 
@@ -151,7 +254,8 @@ void sortAscending() {
 		}
 	}
 }
-//remove this
+
+//traverse backwards
 void sortDescending() {
 	struct Book* current = NULL, * index = NULL;
 
@@ -159,14 +263,14 @@ void sortDescending() {
 	string tempgenre, tempbookTitle;
 	float tempprice;
 
-	if (head == NULL) {
+	if (tail == NULL) {
 		cout << "No books found.";
 		return;
 	}
 	else {
-		for (current = head; current->next != NULL; current = current->next) {
-			for (index = current->next; index != NULL; index = index->next) {
-				if (current->quantity < index->quantity) {
+		for (current = tail; current->prev != NULL; current = current->prev) {
+			for (index = current->prev; index != NULL; index = index->prev) {
+				if (current->quantity > index->quantity) {
 
 					temp = current->quantity;
 					current->quantity = index->quantity;
@@ -267,14 +371,12 @@ void addNewBook() {
 
 
 	cout << "Title: " << endl;
-	/*cin >> addnewbook->bookTitle;*/
 	cin.ignore();//make sure during the cin, the getline doesn not take enter as an input 
 	getline(cin, addnewbook->bookTitle);
 
 	while (addnewbook->bookTitle == "") {
 		cout << "Invalid input\n";
 		cout << "Title: ";
-		/*cin >> addnewbook->bookTitle;*/
 		getline(cin, addnewbook->bookTitle);
 	}
 
@@ -325,8 +427,8 @@ void addNewBook() {
 
 }
 
-//argument takes in user choice in sorting and create and if statement in which if choice is 1, call sort(). If choice is 2, create a reverse traversal function on sort()
-void displayallbook(/*int choice*/) { 
+
+void displayallbook() { 
 
 	struct Book* temp;
 	temp = head;
@@ -434,23 +536,25 @@ struct Purchase {
 		this->prev = NULL;
 	}
 
-	void addnewpurchase() {
-
-
-	}
-
-	void displayallpurchase() {
-
-	}
-
-	void sortpurchase() {
-
-	}
-
-	void displaypurchase(/* Purchase purchase */) {
-
-	}
+	
 };
+
+void addnewpurchase() {
+
+
+}
+
+void displayallpurchase() {
+
+}
+
+void sortpurchase() {
+
+}
+
+void displaypurchase(/* Purchase purchase */) {
+
+}
 
 void Menu() {
 	cout << "Welcome, Admin. What would you like to do?";
@@ -461,7 +565,7 @@ void Menu() {
 	cout << "2. Display All Books" << endl;//
 	cout << "3. Search books by ID" << endl;//
 	cout << "4. Filter by category" << endl;
-	cout << "5. Update book" << endl;
+	cout << "5. Update book" << endl;//
 	cout << "6. Sort by quantity" << endl;//
 	cout << "7. Delete book" << endl;//
 	cout << "8. Add New Purchase" << endl;
@@ -566,32 +670,28 @@ int main() {
 		{
 	case 8:
 		//Add Purchase
-		Purchase newPurchase;
-		newPurchase.addnewpurchase();
+		addnewpurchase();
 		break;
 		}
 
 		{
 	case 9:
 		//Display All Purchases
-		Purchase * displayallpurchase = new Purchase();
-		displayallpurchase->displayallpurchase();
+		displayallpurchase();
 		break;
 		}
 
 		{
 	case 10:
 		//Sort Purchases
-		Purchase * sortpurchase = new Purchase();
-		sortpurchase->sortpurchase();
+		sortpurchase();
 		break;
 		}
 
 		{
 	case 11:
 		//Search Purchase
-		Purchase * displaypurchase = new Purchase();
-		displaypurchase->displaypurchase();
+		displaypurchase();
 		break;
 		}
 
