@@ -524,6 +524,13 @@ void displaybyId() {
 	struct Book* index = NULL;
 	string tempgenre, tempbookTitle;
 	float tempprice;
+	struct Book* temp;
+	temp = head;
+
+	if (temp == NULL && current == NULL && index == NULL) {
+		cout << "No records in the list!\n\n";
+		return;
+	}
 
 	//Bubble sort algo 
 	for (current = head; current->next != NULL; current = current->next) {
@@ -556,12 +563,8 @@ void displaybyId() {
 
 	
 
-	struct Book* temp;
-	temp = head;
 
-	if (temp == NULL && current == NULL && index == NULL) {
-		cout << "No records in the list!\n\n";
-	}
+	
 	cout << "___________________________________________________________________________________________\n";
 	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
 	cout << "-------------------------------------------------------------------------------------------\n";
