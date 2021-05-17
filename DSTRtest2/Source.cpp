@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 using namespace std;
 struct Book* head = NULL;
 struct Book* tail = NULL;
@@ -8,11 +9,11 @@ struct Book* prev = NULL;
 void displayallbook();
 struct Book {
 	int bookId, quantity;
-	string bookTitle, genre;
+	string genre, bookTitle;
 	float price;
 
 	//Pointers
-	
+
 	Book* tail;
 	Book* next;
 	Book* prev;
@@ -23,7 +24,7 @@ struct Book {
 		this->genre = "";
 		this->price = NULL;
 		this->quantity = NULL;
-		
+
 		this->next = NULL;
 		this->prev = NULL;
 		this->tail = NULL;
@@ -35,41 +36,45 @@ void searchBook(int bookId) {
 
 	//Take keyword and search
 
-	struct Book* searchbook; 
+	struct Book* searchbook;
 
 	searchbook = head;
 
 	//Matching the dataset
-	
-		while (searchbook != NULL) {
 
-			if (searchbook->bookId == bookId) {
-				cout << "Book ID \tBook Title \tGenre \tQuantity \tPrice\n";
-				cout << "" << searchbook->bookId <<
-					"\t \t" << searchbook->bookTitle <<
-					"\t \t" << searchbook->genre <<
-					"\t \t" << searchbook->quantity <<
-					"\t \t" << searchbook->price << "\n";
+	while (searchbook != NULL) {
 
-				break;
-			}
-			else {
-				cout << "Book not found!"; // This prints despite records existing. Maybe due to the loop. 
-				searchbook = searchbook->next;
-			}
-
+		if (searchbook->bookId == bookId) {
+			cout << "___________________________________________________________________________________________\n";
+			cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
+			cout << "-------------------------------------------------------------------------------------------\n";
+			cout << "     " << searchbook->bookId <<
+				"\t \t" << searchbook->bookTitle <<
+				"\t \t" << searchbook->genre <<
+				"\t \t       " << searchbook->quantity <<
+				"\t \t" << searchbook->price << "  " << "\n";
+			
+			goto endsearch;
 		}
+		else {
+			 //This prints despite records existing. Maybe due to the loop. 
+			searchbook = searchbook->next;
+		}
+
+	}
+	cout << "Book not found!";
+	endsearch:;
 
 	cout << endl;
 
 }
 
-void filterbook(/*string category*/) {
+void filterbook(/*string category*/ ) {
 
 
 }
 
-void updatebook(/*Book* book, genre, newdata*/) {
+void updatebook(/*Book book, genre, newdata*/ ) {
 
 }
 
@@ -77,15 +82,15 @@ void sortByQuantity(int order) {
 
 	switch (order) {
 		{
-		case 1:
-			break;	//function for ascending order
+	case 1:
+		break;	//function for ascending order
 		}
-		
+
 		{
-		case 2:
-			break;	//function for descending order
+	case 2:
+		break;	//function for descending order
 		}
-		
+
 	}
 	/*int order;
 	cin >> order;*/
@@ -95,32 +100,68 @@ void sortByQuantity(int order) {
 	//Descending order
 }
 
-void deletebook(/*Book* book*/) {
+void deletebook() {
 
-}
+	struct Book* db;
+	db = head;
+
+	cout << "Book ID?";
+	int bookid;
+	cin >> bookid;
+	if (head == NULL) {
+		cout << "No Book found!";
+		return;
+	}
+
+	Book* del = head;
+
+	if (del->bookId == bookid) {
+		head = del->next;
+		delete(del);
+
+		cout << "Book Deleted Successfully!" << "\n";
+		return;
+	}
+
+	// find previous node
+	Book* prev = head;
+	while (prev->next != NULL) {
+		if (prev->next->bookId == bookid) {
+
+			// link prev and next
+			Book* next = prev->next->next;
+			free(prev->next);
+			prev->next = next;
+			cout << "Book Deleted successfully!" << "\n";
+			return;
+		}
+		prev = prev->next;
+	}
+	cout << "No Book Record Found!" << "\n";
+};
 
 void addNewBook() {
 
 	struct Book* addnewbook = new Book();
 
-	struct Book* checkID; 
+	struct Book* checkID;
 	checkID = head;
 
 	//change init values 
 	cout << "ID: " << endl;
 	cin >> addnewbook->bookId;
 	while (checkID != NULL) {
-		
+
 		if (addnewbook->bookId == checkID->bookId) {
-					cout << "Duplicate book! Enter a valid book ID" << "\n";
-					cin >> addnewbook->bookId;
-					checkID == NULL;
+			cout << "Duplicate book! Enter a valid book ID" << "\n";
+			cin >> addnewbook->bookId;
+			checkID == NULL;
 		}
 		else {
 			checkID = checkID->next;
 		}
 		//Duplicate only works with the previous record and not from beginning
-		
+
 	}
 
 	while ((addnewbook->bookId <= 0 || addnewbook->bookId >= 1000000)) {
@@ -128,15 +169,21 @@ void addNewBook() {
 		cout << "ID: ";
 		cin >> addnewbook->bookId;
 	}
-	
 
+	
 	cout << "Title: " << endl;
-	cin >> addnewbook->bookTitle;
+	/*cin >> addnewbook->bookTitle;*/
+	cin.ignore();
+	getline(cin, addnewbook->bookTitle);
+
 	while (addnewbook->bookTitle == "") {
 		cout << "Invalid input\n";
 		cout << "Title: ";
-		cin >> addnewbook->bookTitle;
+		/*cin >> addnewbook->bookTitle;*/
+		getline(cin, addnewbook->bookTitle);
 	}
+
+
 
 	cout << "Genre: " << endl;
 	cin >> addnewbook->genre;
@@ -180,10 +227,10 @@ void addNewBook() {
 	cout << "\n\n\n";
 	cout << "Book added!" << endl;
 
-	
+
 }
 
-void displayallbook() {
+void displayallbook() { //Updated Visuals & Display
 
 	struct Book* temp;
 	temp = head;
@@ -191,20 +238,22 @@ void displayallbook() {
 	if (temp == NULL) {
 		cout << "No records in the list!";
 	}
-
+	cout << "___________________________________________________________________________________________\n";
+	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
+	cout << "-------------------------------------------------------------------------------------------\n";
 	while (temp != NULL) {
-			cout << "Book ID \tBook Title \tGenre \tQuantity \tPrice\n";
-			cout << "" << temp->bookId <<
+
+		cout << "     " << temp->bookId <<
 			"\t \t" << temp->bookTitle <<
 			"\t \t" << temp->genre <<
-			"\t \t" << temp->quantity <<
-			"\t \t" << temp->price << "\n";
-			temp = temp->next;
-			
+			"\t \t       " << temp->quantity <<
+			"\t \t" << temp->price << "  " << "\n";
+		temp = temp->next;
+
 	}
-	
+
 	cout << endl;
-	
+
 }
 
 struct Purchase {
@@ -238,7 +287,7 @@ struct Purchase {
 
 	}
 
-	void displaypurchase(/*Purchase* purchase*/) {
+	void displaypurchase(/* Purchase purchase */ ) {
 
 	}
 };
@@ -246,7 +295,7 @@ struct Purchase {
 void Menu() {
 	cout << "Welcome, Admin. What would you like to do?";
 
-	
+
 	cout << endl;
 	cout << "1. Add new book" << endl;
 	cout << "2. Display All Books" << endl;
@@ -268,95 +317,109 @@ int main() {
 	//do while loop
 	switch (userchoice) {
 		{
-		case 1:
-			int decision = 1;
-			do {
-				addNewBook();
-				displayallbook();
-				cout << "Would you like to add more books? 1. Yes 2. No";
-				cin >> decision;
-			} while (decision == 1);
-			main();
-			break;
-		}
-
-		{
-		case 2:
+	case 1:
+		int decision = 1;
+		do {
+			addNewBook();
 			displayallbook();
-			break;
-		}
-		{
-		case 3:
-			int keyword;
-			int flag = 1;
-			do {
-				displayallbook();
-				cout << "Search: \n\n";
-				cin >> keyword;
-				searchBook(keyword);
-
-				cout << "Keep searching? 1. Yes 2. No\n\n";
-				cin >> flag;
-				
-			} while (flag == 1);
-			break;
+			cout << "Would you like to add more books? 1. Yes 2. No";
+			cin >> decision;
+		} while (decision == 1);
+		main();
+		break;
 		}
 
 		{
-		case 4:
-			filterbook();
+	case 2:
+		int decision;
+		displayallbook();
+		
+		cin >> decision;
+		if (decision == 1) {
+			cout << "Returned to main menu. Choose an option \n\n\n";
+			main();
+		}
+		else {
 			break;
+		}
+		//added so it doesnt quit application immediately
+		break;
+		}
+		{
+	case 3:
+		int keyword;
+		int flag = 1;
+		do {
+			displayallbook();
+			cout << "Search: \n\n";
+			cin >> keyword;
+			searchBook(keyword);
+
+			cout << "Keep searching? 1. Yes 2. No\n\n";
+			cin >> flag;
+
+		} while (flag == 1);
+		main();
+		break;
 		}
 
 		{
-		case 5:
-			updatebook();
-			break;
+	case 4:
+		filterbook();
+		break;
 		}
 
 		{
-		case 6:
-			cout << "Which order would you like to sort it by? 1. Ascending 2. Descending\n\n";
-			int order;
-			cin >> order;
-			sortByQuantity(order);
-			break;
+	case 5:
+		updatebook();
+		break;
+		}
+
+		{
+	case 6:
+		cout << "Which order would you like to sort it by? 1. Ascending 2. Descending\n\n";
+		int order;
+		cin >> order;
+		sortByQuantity(order);
+		break;
 		}
 		{
-		case 7:
-			deletebook();
-			break;
+	case 7:
+		deletebook();
+		displayallbook();
+		main();
+		break;
 		}
 		{
-		case 8:
-			Purchase newPurchase;
-			newPurchase.addnewpurchase();
-			break;
+	case 8:
+		Purchase newPurchase;
+		newPurchase.addnewpurchase();
+		break;
 		}
 		{
-		case 9:
-			Purchase * displayallpurchase = new Purchase();
-			displayallpurchase->displayallpurchase();
-			break;
+	case 9:
+		Purchase * displayallpurchase = new Purchase();
+		displayallpurchase->displayallpurchase();
+		break;
 		}
 		{
-		case 10:
-			Purchase * sortpurchase = new Purchase();
-			sortpurchase->sortpurchase();
-			break;
+	case 10:
+		Purchase * sortpurchase = new Purchase();
+		sortpurchase->sortpurchase();
+		break;
 		}
 		{
-		case 11:
-			Purchase * displaypurchase = new Purchase();
-			displaypurchase->displaypurchase();
-			break;
+	case 11:
+		Purchase * displaypurchase = new Purchase();
+		displaypurchase->displaypurchase();
+		break;
 		}
 		{
-		default:
-			cout << "Wrong choice.";
-			break;
+	default:
+		cout << "Wrong choice.";
+		break;
 		}
 	}
-	
+
 
 }
