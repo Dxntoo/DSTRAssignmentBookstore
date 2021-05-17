@@ -61,7 +61,7 @@ void searchBook(int bookId) {
 			goto endsearch;
 		}
 		else {
-			//This prints despite records existing. Maybe due to the loop. 
+			
 			searchbook = searchbook->next;
 		}
 
@@ -73,8 +73,71 @@ endsearch:;
 
 }
 
-void filterbook(/*string category*/) {
+void filterbook() {
+	//Filter by genre; action, adventure, comedy, romance, scifi, fantasy, horror, others
+	// init temp variable
+filtermenu:;
+	struct Book* filter;
 
+	filter = head;
+
+	string userchoice;
+	int decision;
+	cout << "Filter by _____: " << endl;
+
+	cout << "1. Action" << endl;
+	cout << "2. Adventure" << endl;
+	cout << "3. Comedy" << endl;
+	cout << "4. Romance" << endl;
+	cout << "5. Sci-Fi" << endl;
+	cout << "6. Fantasy" << endl;
+	cout << "7. Horror" << endl;
+	cout << "8. Others" << endl;
+
+	cin >> userchoice;
+
+
+	if (filter == NULL) {
+		cout << "No books found.";
+	}
+
+	cout << "___________________________________________________________________________________________\n";
+	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
+	cout << "-------------------------------------------------------------------------------------------\n";
+
+	while (filter != NULL) {
+		if (filter->genre == userchoice) {
+			
+			cout << "     " << filter->bookId <<
+				"\t \t" << filter->bookTitle <<
+				"\t \t" << filter->genre <<
+				"\t \t       " << filter->quantity <<
+				"\t \t" << filter->price << "  " << "\n";
+
+			
+			filter = filter->next;
+		}
+		else {
+			filter = filter->next;
+		}
+	}
+
+	cout << "Continue? 1. Yes 2. No" << endl;
+	
+	cin >> decision;
+	if (decision == 1) {
+		goto filtermenu;
+	}
+	else if (decision == 2) {
+		goto mainmenu;
+	}
+	else {
+		return;
+	}
+	
+	
+mainmenu:;
+	main();
 
 }
 
@@ -263,14 +326,14 @@ void sortDescending() {
 	string tempgenre, tempbookTitle;
 	float tempprice;
 
-	if (tail == NULL) {
+	if (head == NULL) {
 		cout << "No books found.";
 		return;
 	}
 	else {
-		for (current = tail; current->prev != NULL; current = current->prev) {
-			for (index = current->prev; index != NULL; index = index->prev) {
-				if (current->quantity > index->quantity) {
+		for (current = head; current->next != NULL; current = current->next) {
+			for (index = current->next; index != NULL; index = index->next) {
+				if (current->quantity < index->quantity) {
 
 					temp = current->quantity;
 					current->quantity = index->quantity;
@@ -434,7 +497,7 @@ void displayallbook() {
 	temp = head;
 	
 	if (temp == NULL) {
-		cout << "No records in the list!";
+		cout << "No records in the list!\n\n";
 	}
 	cout << "___________________________________________________________________________________________\n";
 	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
@@ -453,7 +516,7 @@ void displayallbook() {
 	cout << endl;
 
 }
-
+//Issue 1
 void displaybyId() {
 
 	int tmp;
@@ -462,7 +525,7 @@ void displaybyId() {
 	string tempgenre, tempbookTitle;
 	float tempprice;
 
-	//Bubble sort algo
+	//Bubble sort algo 
 	for (current = head; current->next != NULL; current = current->next) {
 		for (index = current->next; index != NULL; index = index->next) {
 			if (current->bookId > index->bookId) {
@@ -491,17 +554,16 @@ void displaybyId() {
 		}
 	}
 
+	
 
 	struct Book* temp;
 	temp = head;
 
-
-	//change this to use head and tail 
-	if (temp == NULL) {
-		cout << "No records in the list!";
+	if (temp == NULL && current == NULL && index == NULL) {
+		cout << "No records in the list!\n\n";
 	}
 	cout << "___________________________________________________________________________________________\n";
-	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
+	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
 	cout << "-------------------------------------------------------------------------------------------\n";
 	while (temp != NULL) {
 
@@ -621,8 +683,11 @@ int main() {
 		int flag = 1;
 		do {
 			displayallbook();
-			cout << "Search: \n\n";
+			cout << "Search:           (Type 'Exit' to exit)\n\n";
 			cin >> keyword;
+			if (keyword == 'Exit') {
+				break;
+			}
 			searchBook(keyword);
 
 			cout << "Keep searching? 1. Yes 2. No\n\n";
