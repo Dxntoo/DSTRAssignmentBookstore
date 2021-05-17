@@ -102,21 +102,23 @@ void sortByQuantity(int order) {
 
 void deletebook() {
 
-	struct Book* db;
-	db = head;
-
 	cout << "Book ID?";
 	int bookid;
+	//enters a bookid to be deleted
 	cin >> bookid;
+	//validation for null
 	if (head == NULL) {
 		cout << "No Book found!";
 		return;
 	}
-
+	//creates another instance and have its value as head
 	Book* del = head;
 
+	//if the bookId in database matches with search
 	if (del->bookId == bookid) {
+		//head value changes to the next node
 		head = del->next;
+		//delete node
 		delete(del);
 
 		cout << "Book Deleted Successfully!" << "\n";
