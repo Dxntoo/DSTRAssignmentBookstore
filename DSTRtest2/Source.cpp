@@ -53,28 +53,28 @@ void searchBook(int bookId) {
 				"\t \t" << searchbook->genre <<
 				"\t \t       " << searchbook->quantity <<
 				"\t \t" << searchbook->price << "  " << "\n";
-			
+
 			goto endsearch;
 		}
 		else {
-			 //This prints despite records existing. Maybe due to the loop. 
+			//This prints despite records existing. Maybe due to the loop. 
 			searchbook = searchbook->next;
 		}
 
 	}
 	cout << "Book not found!";
-	endsearch:;
+endsearch:;
 
 	cout << endl;
 
 }
 
-void filterbook(/*string category*/ ) {
+void filterbook(/*string category*/) {
 
 
 }
 
-void updatebook(/*Book book, genre, newdata*/ ) {
+void updatebook(/*Book book, genre, newdata*/) {
 
 }
 
@@ -170,10 +170,10 @@ void addNewBook() {
 		cin >> addnewbook->bookId;
 	}
 
-	
+
 	cout << "Title: " << endl;
 	/*cin >> addnewbook->bookTitle;*/
-	cin.ignore();
+	cin.ignore();//make sure during the cin, the getline doesn not take enter as an input 
 	getline(cin, addnewbook->bookTitle);
 
 	while (addnewbook->bookTitle == "") {
@@ -287,7 +287,7 @@ struct Purchase {
 
 	}
 
-	void displaypurchase(/* Purchase purchase */ ) {
+	void displaypurchase(/* Purchase purchase */) {
 
 	}
 };
@@ -318,6 +318,7 @@ int main() {
 	switch (userchoice) {
 		{
 	case 1:
+		//Add Book
 		int decision = 1;
 		do {
 			addNewBook();
@@ -331,9 +332,10 @@ int main() {
 
 		{
 	case 2:
-		int decision;
+		//Display All Books
+		int decision = 1;
 		displayallbook();
-		
+		cout << "Would you like to be returned to the Main Menu? 1.Yes 2.Exit \n\n\n";
 		cin >> decision;
 		if (decision == 1) {
 			cout << "Returned to main menu. Choose an option \n\n\n";
@@ -345,8 +347,10 @@ int main() {
 		//added so it doesnt quit application immediately
 		break;
 		}
+
 		{
 	case 3:
+		//Search for a Book
 		int keyword;
 		int flag = 1;
 		do {
@@ -365,55 +369,69 @@ int main() {
 
 		{
 	case 4:
+		//Filter Books
 		filterbook();
 		break;
 		}
 
 		{
 	case 5:
+		//Update Book
 		updatebook();
 		break;
 		}
 
 		{
 	case 6:
+		//Sort Books
 		cout << "Which order would you like to sort it by? 1. Ascending 2. Descending\n\n";
 		int order;
 		cin >> order;
 		sortByQuantity(order);
 		break;
 		}
+
 		{
 	case 7:
+		//Delete Books
 		deletebook();
 		displayallbook();
 		main();
 		break;
 		}
+
 		{
 	case 8:
+		//Add Purchase
 		Purchase newPurchase;
 		newPurchase.addnewpurchase();
 		break;
 		}
+
 		{
 	case 9:
+		//Display All Purchases
 		Purchase * displayallpurchase = new Purchase();
 		displayallpurchase->displayallpurchase();
 		break;
 		}
+
 		{
 	case 10:
+		//Sort Purchases
 		Purchase * sortpurchase = new Purchase();
 		sortpurchase->sortpurchase();
 		break;
 		}
+
 		{
 	case 11:
+		//Search Purchase
 		Purchase * displaypurchase = new Purchase();
 		displaypurchase->displaypurchase();
 		break;
 		}
+
 		{
 	default:
 		cout << "Wrong choice.";
