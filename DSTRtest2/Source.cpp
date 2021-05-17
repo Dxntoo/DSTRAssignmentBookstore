@@ -7,6 +7,10 @@ struct Book* next = NULL;
 struct Book* prev = NULL;
 
 void displayallbook();
+void sortAscending();
+void sortDescending();
+int main();
+
 struct Book {
 	int bookId, quantity;
 	string genre, bookTitle;
@@ -83,11 +87,17 @@ void sortByQuantity(int order) {
 	switch (order) {
 		{
 	case 1:
+		sortAscending();
+		displayallbook();
+		main();
 		break;	//function for ascending order
 		}
 
 		{
 	case 2:
+		sortDescending();
+		displayallbook();
+		main();
 		break;	//function for descending order
 		}
 
@@ -99,7 +109,90 @@ void sortByQuantity(int order) {
 
 	//Descending order
 }
+//rename it to sort() and remove sortDescending
+void sortAscending() {
+	struct Book* current = NULL, * index = NULL;
 
+	int temp;
+	string tempgenre, tempbookTitle;
+	float tempprice;
+
+	if (head == NULL) {
+		cout << "No books found.";
+		return;
+	}
+	else {
+		for (current = head; current->next != NULL; current = current->next) {
+			for (index = current->next; index != NULL; index = index->next) {
+				if (current->quantity > index->quantity) {
+
+					temp = current->quantity;
+					current->quantity = index->quantity;
+					index->quantity = temp;
+
+					temp = current->bookId;
+					current->bookId = index->bookId;
+					index->bookId = temp;
+
+					tempbookTitle = current->bookTitle;
+					current->bookTitle = index->bookTitle;
+					index->bookTitle = tempbookTitle;
+
+					tempprice = current->price;
+					current->price = index->price;
+					index->price = tempprice;
+
+					tempgenre = current->genre;
+					current->genre = index->genre;
+					index->genre = tempgenre;
+
+				}
+			}
+		}
+	}
+}
+//remove this
+void sortDescending() {
+	struct Book* current = NULL, * index = NULL;
+
+	int temp;
+	string tempgenre, tempbookTitle;
+	float tempprice;
+
+	if (head == NULL) {
+		cout << "No books found.";
+		return;
+	}
+	else {
+		for (current = head; current->next != NULL; current = current->next) {
+			for (index = current->next; index != NULL; index = index->next) {
+				if (current->quantity < index->quantity) {
+
+					temp = current->quantity;
+					current->quantity = index->quantity;
+					index->quantity = temp;
+
+					temp = current->bookId;
+					current->bookId = index->bookId;
+					index->bookId = temp;
+
+					tempbookTitle = current->bookTitle;
+					current->bookTitle = index->bookTitle;
+					index->bookTitle = tempbookTitle;
+
+					tempprice = current->price;
+					current->price = index->price;
+					index->price = tempprice;
+
+					tempgenre = current->genre;
+					current->genre = index->genre;
+					index->genre = tempgenre;
+
+				}
+			}
+		}
+	}
+}
 void deletebook() {
 
 	cout << "Book ID?";
@@ -232,11 +325,76 @@ void addNewBook() {
 
 }
 
-void displayallbook() { //Updated Visuals & Display
+//argument takes in user choice in sorting and create and if statement in which if choice is 1, call sort(). If choice is 2, create a reverse traversal function on sort()
+void displayallbook(/*int choice*/) { 
+
+	struct Book* temp;
+	temp = head;
+	
+	if (temp == NULL) {
+		cout << "No records in the list!";
+	}
+	cout << "___________________________________________________________________________________________\n";
+	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
+	cout << "-------------------------------------------------------------------------------------------\n";
+	while (temp != NULL) {
+
+		cout << "     " << temp->bookId <<
+			"\t \t" << temp->bookTitle <<
+			"\t \t" << temp->genre <<
+			"\t \t       " << temp->quantity <<
+			"\t \t" << temp->price << "  " << "\n";
+		temp = temp->next;
+
+	}
+	
+	cout << endl;
+
+}
+
+void displaybyId() {
+
+	int tmp;
+	struct Book* current = NULL;
+	struct Book* index = NULL;
+	string tempgenre, tempbookTitle;
+	float tempprice;
+
+	//Bubble sort algo
+	for (current = head; current->next != NULL; current = current->next) {
+		for (index = current->next; index != NULL; index = index->next) {
+			if (current->bookId > index->bookId) {
+
+				tmp = current->quantity;
+				current->quantity = index->quantity;
+				index->quantity = tmp;
+
+				tmp = current->bookId;
+				current->bookId = index->bookId;
+				index->bookId = tmp;
+
+				tempbookTitle = current->bookTitle;
+				current->bookTitle = index->bookTitle;
+				index->bookTitle = tempbookTitle;
+
+				tempprice = current->price;
+				current->price = index->price;
+				index->price = tempprice;
+
+				tempgenre = current->genre;
+				current->genre = index->genre;
+				index->genre = tempgenre;
+
+			}
+		}
+	}
+
 
 	struct Book* temp;
 	temp = head;
 
+
+	//change this to use head and tail 
 	if (temp == NULL) {
 		cout << "No records in the list!";
 	}
@@ -254,8 +412,8 @@ void displayallbook() { //Updated Visuals & Display
 
 	}
 
-	cout << endl;
 
+	cout << endl;
 }
 
 struct Purchase {
@@ -299,17 +457,19 @@ void Menu() {
 
 
 	cout << endl;
-	cout << "1. Add new book" << endl;
-	cout << "2. Display All Books" << endl;
-	cout << "3. Search books by ID" << endl;
+	cout << "1. Add new book" << endl;//
+	cout << "2. Display All Books" << endl;//
+	cout << "3. Search books by ID" << endl;//
 	cout << "4. Filter by category" << endl;
 	cout << "5. Update book" << endl;
-	cout << "6. Sort by quantity" << endl;
-	cout << "7. Delete book" << endl;
+	cout << "6. Sort by quantity" << endl;//
+	cout << "7. Delete book" << endl;//
 	cout << "8. Add New Purchase" << endl;
 	cout << "9. Display All Purchase" << endl;
 	cout << "10. Sort Purchase" << endl;
-	cout << "11. Display Specific Purchase by ID" << endl;
+	cout << "11. Display Specific Purchase by ID\n\n" << endl;
+
+	cout << "12. Exit" << endl;
 }
 
 int main() {
@@ -336,7 +496,7 @@ int main() {
 	case 2:
 		//Display All Books
 		int decision = 1;
-		displayallbook();
+		displaybyId();
 		cout << "Would you like to be returned to the Main Menu? 1.Yes 2.Exit \n\n\n";
 		cin >> decision;
 		if (decision == 1) {
@@ -390,6 +550,7 @@ int main() {
 		int order;
 		cin >> order;
 		sortByQuantity(order);
+		//display by traversing using head or tail
 		break;
 		}
 
@@ -431,6 +592,13 @@ int main() {
 		//Search Purchase
 		Purchase * displaypurchase = new Purchase();
 		displaypurchase->displaypurchase();
+		break;
+		}
+
+		{
+
+	case 12:
+		//Exit
 		break;
 		}
 
