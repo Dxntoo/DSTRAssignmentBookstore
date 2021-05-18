@@ -1,10 +1,19 @@
+//Version 11
 #include <iostream>
 #include <string>
+
+//************************************ Start Book Management**********************************//
+
 using namespace std;
 struct Book* head = NULL;
 struct Book* tail = NULL;
 struct Book* next = NULL;
 struct Book* prev = NULL;
+
+struct Purchase* pHead = NULL;
+struct Purchase* pTail = NULL;
+struct Purchase* pNext = NULL;
+struct Purchase* pPrev = NULL;
 
 void displayallbook();
 void sortAscending();
@@ -15,9 +24,8 @@ struct Book {
 	int bookId, quantity;
 	string genre, bookTitle;
 	float price;
-
 	//Pointers
-
+	Book* head;
 	Book* tail;
 	Book* next;
 	Book* prev;
@@ -28,13 +36,15 @@ struct Book {
 		this->genre = "";
 		this->price = NULL;
 		this->quantity = NULL;
-
+		this->head = NULL;
 		this->next = NULL;
 		this->prev = NULL;
 		this->tail = NULL;
 	}
 
 };
+
+//**********************************Start Search For Book By ID************************************//
 
 void searchBook(int bookId) {
 
@@ -61,17 +71,20 @@ void searchBook(int bookId) {
 			goto endsearch;
 		}
 		else {
-			
+
 			searchbook = searchbook->next;
 		}
 
 	}
-	cout << "Book not found!";
+	cout << "Book not found!\n";
+	cout << "Type 'Exit' to exit or";
 endsearch:;
 
 	cout << endl;
 
 }
+
+//***********************************Start Filter Book By Genre***********************************//
 
 void filterbook() {
 	//Filter by genre; action, adventure, comedy, romance, scifi, fantasy, horror, others
@@ -98,7 +111,7 @@ filtermenu:;
 
 
 	if (filter == NULL) {
-		cout << "No books found.";
+		cout << "No books found.\n\n";//added \n\n
 	}
 
 	cout << "___________________________________________________________________________________________\n";
@@ -107,14 +120,14 @@ filtermenu:;
 
 	while (filter != NULL) {
 		if (filter->genre == userchoice) {
-			
+
 			cout << "     " << filter->bookId <<
 				"\t \t" << filter->bookTitle <<
 				"\t \t" << filter->genre <<
 				"\t \t       " << filter->quantity <<
 				"\t \t" << filter->price << "  " << "\n";
 
-			
+
 			filter = filter->next;
 		}
 		else {
@@ -123,7 +136,7 @@ filtermenu:;
 	}
 
 	cout << "Continue? 1. Yes 2. No" << endl;
-	
+
 	cin >> decision;
 	if (decision == 1) {
 		goto filtermenu;
@@ -134,12 +147,14 @@ filtermenu:;
 	else {
 		return;
 	}
-	
-	
+
+
 mainmenu:;
 	main();
 
 }
+
+//**********************************Start Update Book By ID************************************//
 
 void updatebook() {
 
@@ -152,7 +167,7 @@ void updatebook() {
 
 	while (current != NULL) {
 		if (current->bookId == bookID) {
-		
+
 			cout << "___________________________________________________________________________________________\n";
 			cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";//moved outside the while loop so it doesnt keep repeating the table header
 			cout << "-------------------------------------------------------------------------------------------\n";
@@ -176,7 +191,7 @@ void updatebook() {
 			switch (choiceupdate)
 			{
 			case 1:
-				
+
 				cout << "Book Title: ";
 				cin.ignore();//make sure during the cin, the getline doesn not take enter as an input 
 				getline(cin, current->bookTitle);
@@ -188,7 +203,7 @@ void updatebook() {
 				}
 				break;
 			case 2:
-				
+
 				cout << "Genre :";
 				cin >> current->genre;
 				while (current->genre == "") {
@@ -198,7 +213,7 @@ void updatebook() {
 				}
 				break;
 			case 3:
-				
+
 				cout << "Quantity :";
 				cin >> current->quantity;
 				while (current->quantity <= 0) {
@@ -208,7 +223,7 @@ void updatebook() {
 				}
 				break;
 			case 4:
-				
+
 				cout << "Price :";
 				cin >> current->price;
 				while (current->price <= 0) {
@@ -232,7 +247,7 @@ void updatebook() {
 				"\t \t       " << current->quantity <<
 				"\t \t" << current->price << "  " << "\n\n\n\n\n";
 
-			
+
 			goto reupdate;
 		}
 		else
@@ -240,13 +255,17 @@ void updatebook() {
 			current = current->next;
 		}
 
-		cout << "\nBook not found.\n";
+		cout << "\nBook not found. Returned to Main Menu.\n";
 	}
 
 main:;
 	main();
 
 }
+
+
+//**********************************Start Sort Book By Quantity************************************//
+
 
 void sortByQuantity(int order) {
 
@@ -268,14 +287,9 @@ void sortByQuantity(int order) {
 		}
 
 	}
-	/*int order;
-	cin >> order;*/
-	//Switch function
-	//Ascending order
 
-	//Descending order
 }
-// traverse forwards
+
 void sortAscending() {
 	struct Book* current = NULL, * index = NULL;
 
@@ -318,7 +332,6 @@ void sortAscending() {
 	}
 }
 
-//traverse backwards
 void sortDescending() {
 	struct Book* current = NULL, * index = NULL;
 
@@ -360,6 +373,11 @@ void sortDescending() {
 		}
 	}
 }
+
+
+//**********************************Start Delete Book By ID************************************//
+
+
 void deletebook() {
 
 	cout << "Book ID?";
@@ -402,10 +420,13 @@ void deletebook() {
 	cout << "No Book Record Found!" << "\n";
 };
 
+
+//**********************************Start Add Book By ID************************************//
+
+
+
 void addNewBook() {
-
 	struct Book* addnewbook = new Book();
-
 	struct Book* checkID;
 	checkID = head;
 
@@ -417,7 +438,7 @@ void addNewBook() {
 		if (addnewbook->bookId == checkID->bookId) {
 			cout << "Duplicate book! Enter a valid book ID" << "\n";
 			cin >> addnewbook->bookId;
-			checkID == NULL;
+			checkID = NULL;
 		}
 		else {
 			checkID = checkID->next;
@@ -487,15 +508,17 @@ void addNewBook() {
 	cout << "\n\n\n";
 	cout << "Book added!" << endl;
 
-
 }
 
 
-void displayallbook() { 
+//**********************************Start Displaying All Books************************************//
+
+
+void displayallbook() {
 
 	struct Book* temp;
 	temp = head;
-	
+
 	if (temp == NULL) {
 		cout << "No records in the list!\n\n";
 	}
@@ -512,11 +535,15 @@ void displayallbook() {
 		temp = temp->next;
 
 	}
-	
+
 	cout << endl;
 
 }
-//Issue 1
+
+
+//**********************************Start Displaying Booking By ID in Ascending Order************************************//
+
+
 void displaybyId() {
 
 	int tmp;
@@ -561,10 +588,7 @@ void displaybyId() {
 		}
 	}
 
-	
 
-
-	
 	cout << "___________________________________________________________________________________________\n";
 	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
 	cout << "-------------------------------------------------------------------------------------------\n";
@@ -579,39 +603,170 @@ void displaybyId() {
 
 	}
 
-
 	cout << endl;
 }
 
+//**********************************Purchase Management************************************//
+
 struct Purchase {
 	int purchaseId;
-	Book* bookItem;
 	float totalPrice;
+	Book* book;
+	/*int bookId, quantity;
+	string genre, bookTitle;
+	float price;*/
 
-	Purchase* head;
-	Purchase* next;
-	Purchase* prev;
+	Purchase* pHead;
+	Purchase* pTail;
+	Purchase* pNext;
+	Purchase* pPrev;
 
 	Purchase() {
 		this->purchaseId = NULL;
-		this->bookItem = NULL;
+		this->book = NULL;
+		/*this->bookId = NULL;
+		this->quantity = NULL;
+		this->genre = "";
+		this->bookTitle = "";
+		this->price = NULL;*/
 		this->totalPrice = NULL;
-		this->head = NULL;
-		this->next = NULL;
-		this->prev = NULL;
+		this->pHead = NULL;
+		this->pTail = NULL;
+		this->pNext = NULL;
+		this->pPrev = NULL;
 	}
 
-	
+
 };
 
 void addnewpurchase() {
+	string pBookTitle, pGenre;
+	int pBookId, pQuantity;
+	float pPrice;
 
+	//Create new instance of purchase
+	struct Purchase* newpurchase = new Purchase();
+	struct Book* addBookPurchase;
+	addBookPurchase = head;
+
+	struct Book* purchaseItems = new Book{};
+
+	//check PurchaseID
+	struct Purchase* checkPurchaseID;
+	checkPurchaseID = pHead;
+reenterbooks:;
+	//Validate for existing purchase ID
+	cout << "Purchase ID: " << endl;
+	cin >> newpurchase->purchaseId;
+
+	while ((newpurchase->purchaseId <= 0 || newpurchase->purchaseId >= 1000000)) {
+		cout << "Invalid input\n";
+		cout << "ID: ";
+		cin >> newpurchase->purchaseId;
+	}
+
+
+
+	
+//reenterbooks
+	int BookID;
+	int decision;
+	cout << "Book ID: " << endl;
+	cin >> BookID;
+	while (addBookPurchase != NULL) {
+		if (addBookPurchase->bookId == BookID) {
+
+			//Display the list
+			cout << "___________________________________________________________________________________________________________\n";
+			cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
+			cout << "-----------------------------------------------------------------------------------------------------------\n";
+			cout << "     " << newpurchase->purchaseId <<
+				"\t \t" << addBookPurchase->bookId <<
+				"\t \t" << addBookPurchase->bookTitle <<
+				"\t \t" << addBookPurchase->genre <<
+				"\t \t       " << addBookPurchase->quantity <<
+				"\t \t" << addBookPurchase->price << "  " << "\n";
+			
+			//Insertion to book linked list
+
+			purchaseItems->bookId = addBookPurchase->bookId;
+			purchaseItems->bookTitle = addBookPurchase->bookTitle;
+			purchaseItems->genre = addBookPurchase->genre;
+			purchaseItems->quantity = addBookPurchase->quantity;
+			purchaseItems->price = addBookPurchase->price;
+
+
+			addBookPurchase = addBookPurchase->next;
+			cout << "Add more books? 1. Yes 2. No\n";
+			cin >> decision;
+			if (decision == 1) {
+				goto reenterbooks;
+			}
+			else if(decision == 2){
+
+				break;
+			
+			}
+			
+			/*newpurchase->book = addBookPurchase;*/
+		}
+		else {
+			addBookPurchase = addBookPurchase->next;
+			
+		}
+
+		
+
+	}
+
+
+	
+	//Linkage for purchase linked list
+
+	if (pHead == NULL) {
+		newpurchase->pPrev = NULL;
+		pHead = newpurchase;
+		pTail = newpurchase;
+
+	}
+	else if (pHead != NULL) {
+		newpurchase->pPrev = pTail;
+		pTail->pNext = newpurchase;
+		pTail = newpurchase;
+		pTail->pNext = NULL;
+	}
 
 }
 
 void displayallpurchase() {
+	struct Book* addBookPurchase;
+	addBookPurchase = head;
+	
+	struct Purchase* newpurchase;
+	newpurchase = pHead;
 
+	if (addBookPurchase == NULL) {
+		cout << "No records in the list!\n\n";
+	}
+	
+	while (addBookPurchase != NULL) {
+		cout << "___________________________________________________________________________________________________________\n";
+		cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
+		cout << "-----------------------------------------------------------------------------------------------------------\n";
+		cout << "     " << newpurchase->purchaseId <<
+			"\t \t" << addBookPurchase->bookId <<
+			"\t \t" << addBookPurchase->bookTitle <<
+			"\t \t" << addBookPurchase->genre <<
+			"\t \t       " << addBookPurchase->quantity <<
+			"\t \t" << addBookPurchase->price << "  " << "\n";
+		addBookPurchase = addBookPurchase->next;
+
+	}
+
+	cout << endl;
 }
+
+
 
 void sortpurchase() {
 
@@ -629,7 +784,7 @@ void Menu() {
 	cout << "1. Add new book" << endl;//
 	cout << "2. Display All Books" << endl;//
 	cout << "3. Search books by ID" << endl;//
-	cout << "4. Filter by category" << endl;
+	cout << "4. Filter Book by Genre" << endl;
 	cout << "5. Update book" << endl;//
 	cout << "6. Sort by quantity" << endl;//
 	cout << "7. Delete book" << endl;//
@@ -686,14 +841,15 @@ int main() {
 		int flag = 1;
 		do {
 			displayallbook();
-			cout << "Search:           (Type 'Exit' to exit)\n\n";
+			cout << "Search next ID:\n\n";
+
 			cin >> keyword;
 			if (keyword == 'Exit') {
 				break;
 			}
 			searchBook(keyword);
 
-			cout << "Keep searching? 1. Yes 2. No\n\n";
+			cout << "Keep searching by selecting 1.Yes, 2.No\n\n";
 			cin >> flag;
 
 		} while (flag == 1);
@@ -729,6 +885,7 @@ int main() {
 		{
 	case 7:
 		//Delete Books
+		
 		deletebook();
 		displayallbook();
 		main();
@@ -738,7 +895,11 @@ int main() {
 		{
 	case 8:
 		//Add Purchase
+		int decision = 1;
 		addnewpurchase();
+		/*displayallpurchase();*/
+		
+		cout << "Purchase completed. Exiting...\n\n";
 		break;
 		}
 
