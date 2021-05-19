@@ -232,6 +232,7 @@ void updatebook() {
 					cout << "Price :";
 					cin >> current->price;
 				}
+				break;
 			case 5:
 				goto main;
 			default:
@@ -256,13 +257,14 @@ void updatebook() {
 			current = current->next;
 		}
 
-		cout << "\nBook not found. Returned to Main Menu.\n";
-	}
 
+	}
+	cout << "\nBook not found. Returned to Main Menu.\n";
 main:;
 	main();
 
 }
+
 
 
 //**********************************Start Sort Book By Quantity************************************//
@@ -627,17 +629,13 @@ struct Purchase {
 	Purchase() {
 		this->purchaseId = NULL;
 		this->book = NULL;
-		/*this->bookId = NULL;
-		this->quantity = NULL;
-		this->genre = "";
-		this->bookTitle = "";
-		this->price = NULL;*/
 		this->totalPrice = NULL;
 		this->pHead = NULL;
 		this->pTail = NULL;
 		this->pNext = NULL;
 		this->pPrev = NULL;
 	}
+
 
 
 };
@@ -696,6 +694,19 @@ reenterbooks:;
 				cout << newpurchase->book->price << endl;
 
 
+				int newbookid = newpurchase->book->bookId;
+				string newbooktitle = newpurchase->book->bookTitle;
+				string newbookgenre = newpurchase->book->genre;
+				float price = newpurchase->book->price;
+				int quantity = newpurchase->book->quantity;
+
+
+				cout << newbookid << "\n\n\n\n\n\n";
+				cout << "\n\n\n\n\n\n" << newbooktitle << "\n\n\n\n\n\n";
+				cout << "\n\n\n\n\n\n" << newbookgenre << "\n\n\n\n\n\n";
+				cout << "\n\n\n\n\n\n" << price << "\n\n\n\n\n\n";
+				cout << "\n\n\n\n\n\n" << quantity << "\n\n\n\n\n\n";
+
 				cout << "Quantity" << endl;
 				cin >> purchaseQuantity;
 				
@@ -733,7 +744,7 @@ reenterbooks:;
 		addBookPurchase = addBookPurchase->next;
 		
 	}
-	if (newpurchase != NULL) {
+	while (newpurchase != NULL) {
 		cout << "___________________________________________________________________________________________________________\n";
 		cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
 		cout << "-----------------------------------------------------------------------------------------------------------\n";
@@ -758,8 +769,8 @@ reenterbooks:;
 			current = current->pNext;
 			
 		}
-		
-
+		newpurchase = newpurchase->pNext;
+		break;
 		
 	}
 	
