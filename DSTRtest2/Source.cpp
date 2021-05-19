@@ -640,127 +640,130 @@ struct Purchase {
 };
 
 void addnewpurchase() {
-	string pBookTitle, pGenre;
-	int pBookId, pQuantity;
-	float pPrice;
+
+	//For iteration
+	struct Book* addBookPurchase = head;
 
 	//Create new instance of purchase
-	struct Purchase* newpurchase = new Purchase();
-	struct Book* addBookPurchase;
-	addBookPurchase = head;
-
-	struct Book* purchaseItems = new Book{};
+	struct Purchase* newpurchase = pHead;
+	int purchaseId;
+	/*newpurchase->book = head;*/
 
 	//check PurchaseID
-	struct Purchase* checkPurchaseID;
-	checkPurchaseID = pHead;
+	//struct Purchase* checkPurchaseID;
+	//checkPurchaseID = pHead;
 reenterbooks:;
 	//Validate for existing purchase ID
 	cout << "Purchase ID: " << endl;
-	cin >> newpurchase->purchaseId;
+	cin >> purchaseId;
 
-	while ((newpurchase->purchaseId <= 0 || newpurchase->purchaseId >= 1000000)) {
+	while ((purchaseId <= 0 || purchaseId >= 1000000)) {
 		cout << "Invalid input\n";
 		cout << "ID: ";
-		cin >> newpurchase->purchaseId;
+		cin >> purchaseId;
 	}
 
 
-
-	
-//reenterbooks
+	//TODO: make it so you can set quantity for each book
 	int BookID;
 	int decision;
 	cout << "Book ID: " << endl;
 	cin >> BookID;
 	while (addBookPurchase != NULL) {
 		if (addBookPurchase->bookId == BookID) {
+			//Filter it here with selected books
+			// Add Purchase
+
+			if (newpurchase == NULL) {
+				newpurchase = new Purchase();
+				newpurchase->purchaseId = purchaseId;
+				newpurchase->book = addBookPurchase;
+				newpurchase->pPrev = NULL;
+				pHead = newpurchase;
+				pTail = newpurchase;
+			}
+			else {
+				Purchase* purchase = new Purchase();
+				purchase->purchaseId = purchaseId;
+				purchase->book = addBookPurchase;
+				purchase->pPrev = pTail;
+				pTail->pNext = purchase;
+				pTail = purchase;
+				pTail->pNext = NULL;
+			}
 
 			//Display the list
-			cout << "___________________________________________________________________________________________________________\n";
-			cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
-			cout << "-----------------------------------------------------------------------------------------------------------\n";
-			cout << "     " << newpurchase->purchaseId <<
-				"\t \t" << addBookPurchase->bookId <<
-				"\t \t" << addBookPurchase->bookTitle <<
-				"\t \t" << addBookPurchase->genre <<
-				"\t \t       " << addBookPurchase->quantity <<
-				"\t \t" << addBookPurchase->price << "  " << "\n";
-			
+			if (newpurchase != NULL) {
+				cout << "___________________________________________________________________________________________________________\n";
+				cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
+				cout << "-----------------------------------------------------------------------------------------------------------\n";
+			}
+
+			Purchase* current = newpurchase;
+
+			while (current != NULL) {
+				if (current->purchaseId == purchaseId) {
+					struct Book* currentBook = current->book;
+					cout << "     " << current->purchaseId <<
+						"\t \t" << currentBook->bookId <<
+						"\t \t" << currentBook->bookTitle <<
+						"\t \t" << currentBook->genre <<
+						"\t \t       " << currentBook->quantity <<
+						"\t \t" << currentBook->price << "  " << "\n";
+
+				}
+				current = current->pNext;
+			}
+
 			//Insertion to book linked list
+			//newpurchase->book = newpurchase->book->next;
 
-			purchaseItems->bookId = addBookPurchase->bookId;
-			purchaseItems->bookTitle = addBookPurchase->bookTitle;
-			purchaseItems->genre = addBookPurchase->genre;
-			purchaseItems->quantity = addBookPurchase->quantity;
-			purchaseItems->price = addBookPurchase->price;
-
-
-			addBookPurchase = addBookPurchase->next;
 			cout << "Add more books? 1. Yes 2. No\n";
 			cin >> decision;
 			if (decision == 1) {
+				addBookPurchase = head;
 				goto reenterbooks;
 			}
-			else if(decision == 2){
+			else if (decision == 2) {
 
 				break;
-			
+
 			}
-			
-			/*newpurchase->book = addBookPurchase;*/
-		}
-		else {
-			addBookPurchase = addBookPurchase->next;
-			
-		}
-
 		
-
+		}
+		
+		addBookPurchase = addBookPurchase->next;
 	}
-
 
 	
-	//Linkage for purchase linked list
-
-	if (pHead == NULL) {
-		newpurchase->pPrev = NULL;
-		pHead = newpurchase;
-		pTail = newpurchase;
-
-	}
-	else if (pHead != NULL) {
-		newpurchase->pPrev = pTail;
-		pTail->pNext = newpurchase;
-		pTail = newpurchase;
-		pTail->pNext = NULL;
-	}
 
 }
 
 void displayallpurchase() {
-	struct Book* addBookPurchase;
+	/*struct Book* addBookPurchase;
 	addBookPurchase = head;
-	
-	struct Purchase* newpurchase;
-	newpurchase = pHead;
+	*/
+	struct Purchase* newpurchase = pHead;
+	//newpurchase->book = head;
 
-	if (addBookPurchase == NULL) {
+
+	if (newpurchase == NULL) {
 		cout << "No records in the list!\n\n";
 	}
-	
-	while (addBookPurchase != NULL) {
-		cout << "___________________________________________________________________________________________________________\n";
-		cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
-		cout << "-----------------------------------------------------------------------------------------------------------\n";
-		cout << "     " << newpurchase->purchaseId <<
-			"\t \t" << addBookPurchase->bookId <<
-			"\t \t" << addBookPurchase->bookTitle <<
-			"\t \t" << addBookPurchase->genre <<
-			"\t \t       " << addBookPurchase->quantity <<
-			"\t \t" << addBookPurchase->price << "  " << "\n";
-		addBookPurchase = addBookPurchase->next;
 
+	cout << "___________________________________________________________________________________________________________\n";
+	cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
+	cout << "-----------------------------------------------------------------------------------------------------------\n";
+
+	while (newpurchase != NULL) {
+		struct Book* currentBook = newpurchase->book;
+		cout << "     " << newpurchase->purchaseId <<
+			"\t \t" << currentBook->bookId <<
+			"\t \t" << currentBook->bookTitle <<
+			"\t \t" << currentBook->genre <<
+			"\t \t       " << currentBook->quantity <<
+			"\t \t" << currentBook->price << "  " << "\n";
+		newpurchase = newpurchase->pNext;
 	}
 
 	cout << endl;
@@ -885,7 +888,7 @@ int main() {
 		{
 	case 7:
 		//Delete Books
-		
+
 		deletebook();
 		displayallbook();
 		main();
@@ -897,8 +900,8 @@ int main() {
 		//Add Purchase
 		int decision = 1;
 		addnewpurchase();
-		/*displayallpurchase();*/
-		
+		displayallpurchase();
+
 		cout << "Purchase completed. Exiting...\n\n";
 		break;
 		}
