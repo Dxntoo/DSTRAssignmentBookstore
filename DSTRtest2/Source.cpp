@@ -601,10 +601,10 @@ void displaybyId() {
 	while (temp != NULL) {
 
 		cout << "     " << temp->bookId <<
-			"\t \t" << temp->bookTitle <<
-			"\t \t" << temp->genre <<
-			"\t \t       " << temp->quantity <<
-			"\t \t" << temp->price << "  " << "\n";
+			"\t || \t" << temp->bookTitle <<
+			"\t || \t" << temp->genre <<
+			"\t || \t       " << temp->quantity <<
+			"\t || \t" << temp->price << "  " << "\n";
 		temp = temp->next;
 
 	}
@@ -627,7 +627,7 @@ struct Purchase {
 	Purchase* pNext;
 	Purchase* pPrev;
 
-	
+
 
 	Purchase() {
 		this->purchaseId = NULL;
@@ -654,10 +654,10 @@ void addnewpurchase() {
 	//Create new instance of purchase
 	struct Purchase* newpurchase = new Purchase();
 	//Create empty new instance of bookquantity
-	
+
 reenterbooks:;
 	int purchaseId;
-	
+
 
 	//Validate for existing purchase ID
 	cout << "Purchase ID: " << endl;
@@ -682,30 +682,26 @@ reenterpurchase:;
 
 	newpurchase = new Purchase();
 	while (newpurchase != NULL) {
-		
+
 		newpurchase->purchaseId = purchaseId;
 		newpurchase->book = new Book();
 		newpurchase->totalPrice = 12;
 
 		//Book
 		while (addBookPurchase != NULL) {
+			while (addBookPurchase->bookId != BookID) {
+				addBookPurchase = addBookPurchase->next;
+			}
+			newpurchase->book->bookId = addBookPurchase->bookId;
+			newpurchase->book->bookTitle = addBookPurchase->bookTitle;
+			newpurchase->book->genre = addBookPurchase->genre;
+			cout << "Quantity" << endl;
+			cin >> newpurchase->book->quantity;
+			newpurchase->book->price = addBookPurchase->price;
 
-				newpurchase->book->bookId = addBookPurchase->bookId;
-				newpurchase->book->bookTitle = addBookPurchase->bookTitle;
-				newpurchase->book->genre = addBookPurchase->genre;
-				cout << "Quantity" << endl;
-				cin >> newpurchase->book->quantity;
-				newpurchase->book->price = addBookPurchase->price;
-
-				addBookPurchase->quantity = addBookPurchase->quantity - newpurchase->book->quantity;
-
-				cout << "     " << newpurchase->purchaseId <<
-					"\t \t" << newpurchase->book->bookId <<
-					"\t \t" << newpurchase->book->bookTitle <<
-					"\t \t" << newpurchase->book->genre <<
-					"\t \t       " << newpurchase->book->quantity <<
-					"\t \t" << newpurchase->book->price << "  " << "\n";
-				break;
+			addBookPurchase->quantity = addBookPurchase->quantity - newpurchase->book->quantity;
+			newpurchase->totalPrice = newpurchase->book->quantity * addBookPurchase->price;
+			break;
 		}
 		if (newpurchase->book->head == NULL) {
 			newpurchase->book->prev = NULL;
@@ -719,7 +715,7 @@ reenterpurchase:;
 			newpurchase->book->tail = newpurchase->book;
 			newpurchase->book->tail->next = NULL;
 		}
-		
+
 		if (pHead == NULL) {
 			newpurchase->pPrev = NULL;
 			pHead = newpurchase;
@@ -732,7 +728,7 @@ reenterpurchase:;
 			pTail = newpurchase;
 			pTail->pNext = NULL;
 		}
-		cout << pHead;
+
 		break;
 	}
 
@@ -741,32 +737,33 @@ reenterpurchase:;
 
 
 void displayallpurchase() {
-	
+
 	struct Purchase* newpurchase = pHead;
 	struct Book* newpurchasebook = newpurchase->book;
-	cout << newpurchasebook->bookId << endl;
+	/*cout << newpurchasebook->bookId << endl;
 	cout << newpurchasebook->bookTitle << endl;
 	cout << newpurchasebook->genre << endl;
 	cout << newpurchasebook->quantity << endl;
-	cout << newpurchasebook->price << endl;
+	cout << newpurchasebook->price << endl;*/
 
 
 	if (newpurchase == NULL) {
 		cout << "No records in the list!\n\n";
 	}
 
-	cout << "___________________________________________________________________________________________________________\n";
-	cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
-	cout << "-----------------------------------------------------------------------------------------------------------\n";
+	cout << "________________________________________________________________________________________________________________________________\n";
+	cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||    Total Price    ||\n";
+	cout << "--------------------------------------------------------------------------------------------------------------------------------\n";
 
 	while (newpurchase != NULL) {
-		
+
 		cout << "     " << newpurchase->purchaseId <<
 			"\t \t" << newpurchase->book->bookId <<
 			"\t \t" << newpurchase->book->bookTitle <<
 			"\t \t" << newpurchase->book->genre <<
 			"\t \t       " << newpurchase->book->quantity <<
-			"\t \t" << newpurchase->book->price << "  " << "\n";
+			"\t \t" << newpurchase->book->price <<
+			"\t \t" << newpurchase->totalPrice << "\n";
 		newpurchase = newpurchase->pNext;
 	}
 
@@ -777,9 +774,7 @@ void displayallpurchase() {
 
 void sortpurchase() {
 	struct Purchase* purchase = pHead;
-
-
-
+	int flag = 1;
 	int tmp;
 	string tempgenre, tempbookTitle;
 	float tempprice;
@@ -792,39 +787,90 @@ void sortpurchase() {
 		return;
 	}
 
-	//Bubble sort algo 
-	for (current = purchase; current->pNext != NULL; current = current->pNext) {
-		for (index = current->pNext; index != NULL; index = index->pNext) {
-			if (current->totalPrice > index->totalPrice) {
+	cout << "Would you like to sort purchases in 1. ascending total price or 2. descending total price?\n\n";
+	cin >> flag;
 
-				tmp = current->book->quantity;
-				current->book->quantity = index->book->quantity;
-				index->book->quantity = tmp;
+	if (flag == 1) {
 
-				tmp = current->book->bookId;
-				current->book->bookId = index->book->bookId;
-				index->book->bookId = tmp;
+		//Bubble sort algo 
+		for (current = purchase; current->pNext != NULL; current = current->pNext) {
+			for (index = current->pNext; index != NULL; index = index->pNext) {
+				if (current->totalPrice > index->totalPrice) {
 
-				tempbookTitle = current->book->bookTitle;
-				current->book->bookTitle = index->book->bookTitle;
-				index->book->bookTitle = tempbookTitle;
+					tmp = current->purchaseId;
+					current->purchaseId = index->purchaseId;
+					index->purchaseId = tmp;
 
-				tempprice = current->book->price;
-				current->book->price = index->book->price;
-				index->book->price = tempprice;
+					tmp = current->totalPrice;
+					current->totalPrice = index->totalPrice;
+					index->totalPrice = tmp;
 
-				tempgenre = current->book->genre;
-				current->book->genre = index->book->genre;
-				index->book->genre = tempgenre;
+					tmp = current->book->quantity;
+					current->book->quantity = index->book->quantity;
+					index->book->quantity = tmp;
 
+					tmp = current->book->bookId;
+					current->book->bookId = index->book->bookId;
+					index->book->bookId = tmp;
+
+					tempbookTitle = current->book->bookTitle;
+					current->book->bookTitle = index->book->bookTitle;
+					index->book->bookTitle = tempbookTitle;
+
+					tempprice = current->book->price;
+					current->book->price = index->book->price;
+					index->book->price = tempprice;
+
+					tempgenre = current->book->genre;
+					current->book->genre = index->book->genre;
+					index->book->genre = tempgenre;
+
+				}
+			}
+		}
+	}
+	else if (flag == 2) {
+		//Bubble sort algo 
+		for (current = purchase; current->pNext != NULL; current = current->pNext) {
+			for (index = current->pNext; index != NULL; index = index->pNext) {
+				if (current->totalPrice < index->totalPrice) {
+
+					tmp = current->purchaseId;
+					current->purchaseId = index->purchaseId;
+					index->purchaseId = tmp;
+
+					tmp = current->totalPrice;
+					current->totalPrice = index->totalPrice;
+					index->totalPrice = tmp;
+
+					tmp = current->book->quantity;
+					current->book->quantity = index->book->quantity;
+					index->book->quantity = tmp;
+
+					tmp = current->book->bookId;
+					current->book->bookId = index->book->bookId;
+					index->book->bookId = tmp;
+
+					tempbookTitle = current->book->bookTitle;
+					current->book->bookTitle = index->book->bookTitle;
+					index->book->bookTitle = tempbookTitle;
+
+					tempprice = current->book->price;
+					current->book->price = index->book->price;
+					index->book->price = tempprice;
+
+					tempgenre = current->book->genre;
+					current->book->genre = index->book->genre;
+					index->book->genre = tempgenre;
+
+				}
 			}
 		}
 	}
 
-
-	cout << "___________________________________________________________________________________________\n";
-	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
-	cout << "-------------------------------------------------------------------------------------------\n";
+	cout << "________________________________________________________________________________________________________________________________\n";
+	cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||    Total Price    ||\n";
+	cout << "--------------------------------------------------------------------------------------------------------------------------------\n";
 	while (purchase != NULL) {
 
 		cout << "     " << purchase->purchaseId <<
@@ -832,7 +878,8 @@ void sortpurchase() {
 			"\t \t" << purchase->book->bookTitle <<
 			"\t \t" << purchase->book->genre <<
 			"\t \t       " << purchase->book->quantity <<
-			"\t \t" << purchase->book->price << "  " << "\n";
+			"\t \t" << purchase->book->price <<
+			"\t \t" << purchase->totalPrice << "  " << "\n";
 		purchase = purchase->pNext;
 
 	}
@@ -842,7 +889,43 @@ void sortpurchase() {
 
 void displaypurchase(/* Purchase purchase */) {
 
+	struct Purchase* purchase = pHead;
+
+	if (purchase == NULL) {
+		cout << "No records in the list!\n\n";
+	}
+	int userchoice;
+	cout << "Display purchases by ID: " << endl;
+	cin >> userchoice;
+
+
+	cout << "________________________________________________________________________________________________________________________________\n";
+	cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||    Total Price    ||\n";
+	cout << "--------------------------------------------------------------------------------------------------------------------------------\n";
+
+	while (purchase != NULL) {
+		while (purchase->purchaseId != userchoice) {
+				purchase = purchase->pNext;
+			}
+		cout << "     " << purchase->purchaseId <<
+			"\t \t" << purchase->book->bookId <<
+			"\t \t" << purchase->book->bookTitle <<
+			"\t \t" << purchase->book->genre <<
+			"\t \t       " << purchase->book->quantity <<
+			"\t \t" << purchase->book->price <<
+			"\t \t" << purchase->totalPrice << "\n";
+		break;
+	}
 	
+	//receive input 
+	
+
+	
+	//display data based on input 
+
+	
+
+
 }
 
 void Menu() {
@@ -974,8 +1057,9 @@ int main() {
 		{
 	case 9:
 		//Display All Purchases
-		
+
 		displayallpurchase();
+		main();
 		break;
 		}
 
@@ -983,14 +1067,26 @@ int main() {
 	case 10:
 		//Sort Purchases
 		sortpurchase();
+		main();
 		break;
 		}
 
 		{
 	case 11:
 		//Search Purchase
+		int displaypurchasechoice;
 		displaypurchase();
-		break;
+		cout << "Return to main menu? 1. Yes 2. No" << endl;
+		cin >> displaypurchasechoice;
+
+		if (displaypurchasechoice == 1) {
+			main();
+
+		}
+		else if (displaypurchasechoice == 2) {
+			break;
+		}
+		
 		}
 
 		{
