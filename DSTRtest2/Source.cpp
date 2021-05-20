@@ -601,10 +601,10 @@ void displaybyId() {
 	while (temp != NULL) {
 
 		cout << "     " << temp->bookId <<
-			"\t || \t" << temp->bookTitle <<
-			"\t || \t" << temp->genre <<
-			"\t || \t       " << temp->quantity <<
-			"\t || \t" << temp->price << "  " << "\n";
+			"\t \t" << temp->bookTitle <<
+			"\t \t" << temp->genre <<
+			"\t \t       " << temp->quantity <<
+			"\t \t" << temp->price << "  " << "\n";
 		temp = temp->next;
 
 	}
@@ -645,6 +645,8 @@ struct Purchase {
 int bookId, quantity;
 string bookTitle, genre;
 float price;
+
+//**********************************Start Add New Purchase************************************//
 
 void addnewpurchase() {
 
@@ -735,6 +737,7 @@ reenterpurchase:;
 }
 
 
+//**********************************Start Display All Purchases************************************//
 
 void displayallpurchase() {
 
@@ -771,6 +774,7 @@ void displayallpurchase() {
 }
 
 
+//**********************************Start Sort Purchase by Total Price************************************//
 
 void sortpurchase() {
 	struct Purchase* purchase = pHead;
@@ -887,6 +891,9 @@ void sortpurchase() {
 	cout << endl;
 }
 
+
+//**********************************Start Display Specific Purchase************************************//
+
 void displaypurchase(/* Purchase purchase */) {
 
 	struct Purchase* purchase = pHead;
@@ -904,26 +911,29 @@ void displaypurchase(/* Purchase purchase */) {
 	cout << "--------------------------------------------------------------------------------------------------------------------------------\n";
 
 	while (purchase != NULL) {
-		while (purchase->purchaseId != userchoice) {
-				purchase = purchase->pNext;
-			}
+		
+		if (purchase->purchaseId == userchoice) {
 		cout << "     " << purchase->purchaseId <<
-			"\t \t" << purchase->book->bookId <<
-			"\t \t" << purchase->book->bookTitle <<
-			"\t \t" << purchase->book->genre <<
-			"\t \t       " << purchase->book->quantity <<
-			"\t \t" << purchase->book->price <<
-			"\t \t" << purchase->totalPrice << "\n";
-		break;
+					"\t \t" << purchase->book->bookId <<
+					"\t \t" << purchase->book->bookTitle <<
+					"\t \t" << purchase->book->genre <<
+					"\t \t       " << purchase->book->quantity <<
+					"\t \t" << purchase->book->price <<
+					"\t \t" << purchase->totalPrice << "\n";
+		}
+		
+		purchase = purchase->pNext;
+	
+		
 	}
-	
-	//receive input 
-	
 
-	
+	//receive input 
+
+
+
 	//display data based on input 
 
-	
+
 
 
 }
@@ -1086,7 +1096,7 @@ int main() {
 		else if (displaypurchasechoice == 2) {
 			break;
 		}
-		
+
 		}
 
 		{
