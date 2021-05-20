@@ -19,6 +19,7 @@ struct Purchase* pPrev = NULL;
 void displayallbook();
 void sortAscending();
 void sortDescending();
+void displaypurchase();
 int main();
 
 struct Book {
@@ -651,13 +652,13 @@ void addnewpurchase() {
 	struct Book* addBookPurchase = head;
 
 	//Create new instance of purchase
-	struct Purchase* newpurchase = pHead;
+	struct Purchase* newpurchase = new Purchase();
 	//Create empty new instance of bookquantity
 	
-
+reenterbooks:;
 	int purchaseId;
 	
-reenterbooks:;
+
 	//Validate for existing purchase ID
 	cout << "Purchase ID: " << endl;
 	cin >> purchaseId;
@@ -673,181 +674,81 @@ reenterbooks:;
 	int BookID;
 	int decision;
 	int purchaseQuantity;
-
-	
+	int flag = 1;
 
 	cout << "Book ID: " << endl;
 	cin >> BookID;
+reenterpurchase:;
 
-	//addBookPurchase: Book type that takes in the full database of books
-	//while addbookpurchase != NULL then if addbookpurchase bookid matches users input then proceed to newpurchase
-	//if the addbookpurchase = NULL then move to next
-	
-	//newpurchase: Purchase type that takes in its own var but also a Book obj. Book obj contains full database unless new Book();
-	//if newpurchase is empty, create a new instance and fill purchaseId of user input and book obj of addbookpurchase. 
-	//
-	
-	//bookquantity: Book type that is completely empty and only takes in books that fits what the user chose and also has its own quantity value.
-	//bookquantity var takes in newpurchase var then couts all data for purchase.
-
-
-	while (addBookPurchase != NULL) {
-		if (addBookPurchase->bookId == BookID) {
-			//Filter it here with selected books
-			// Add Purchase
-
-			if (newpurchase == NULL) {
-				newpurchase = new Purchase();
-				newpurchase->book = new Book();
-
-
-				newpurchase->purchaseId = purchaseId;
-				newpurchase->book->bookId = addBookPurchase->bookId;
-				newpurchase->book->bookTitle = addBookPurchase->bookTitle;
-				newpurchase->book->genre = addBookPurchase->genre;
-				cout << "Quantity" << endl;
-				cin >> newpurchase->book->quantity;
-				newpurchase->book->price = addBookPurchase->price;
-
-				cout << newpurchase->book->bookId << endl; 
-				cout << newpurchase->book->bookTitle << endl;
-				cout << newpurchase->book->genre << endl;
-				cout << newpurchase->book->quantity << endl;
-				cout << newpurchase->book->price << endl;
-
-				
-
-				//Maths to deduct products from main book linked list
-				addBookPurchase->quantity = addBookPurchase->quantity - newpurchase->book->quantity;
-				
-				cout << addBookPurchase->quantity;
-
-				//newpurchase = newpurchase->pNext; // added newpurchase next
-				
-				while (newpurchase != NULL) {
-					cout << "___________________________________________________________________________________________________________\n";
-					cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
-					cout << "-----------------------------------------------------------------------------------------------------------\n";
-
-					if (newpurchase->purchaseId == purchaseId) {
-
-						cout << "     " << newpurchase->purchaseId <<
-							"\t \t" << newpurchase->book->bookId <<
-							"\t \t" << newpurchase->book->bookTitle <<
-							"\t \t" << newpurchase->book->genre <<
-							"\t \t       " << newpurchase->book->quantity <<
-							"\t \t" << newpurchase->book->price << "  " << "\n";
-
-
-						
-
-						newpurchase = newpurchase->pNext;
-
-					}
-
-
-					
-					/*if (pHead == NULL) {
-						newpurchase->pPrev = NULL;
-						pHead = newpurchase;
-						pTail = newpurchase;
-
-					}
-					else if (pHead != NULL) {
-						newpurchase->pPrev = pTail;
-						pTail->pNext = newpurchase;
-						pTail = newpurchase;
-						pTail->pNext = NULL;
-					}*/
-					//removed break
-
-				}
-				
-				
-			}
-			else {
-				
-				cout << newpurchase->book->bookId << endl;
-				cout << newpurchase->book->bookTitle << endl;
-				cout << newpurchase->book->genre << endl;
-				cout << newpurchase->book->quantity << endl;
-				cout << newpurchase->book->price << endl;
-
-				newpurchase->purchaseId = purchaseId;
-				newpurchase->book->bookId = addBookPurchase->bookId;
-				newpurchase->book->bookTitle = addBookPurchase->bookTitle;
-				newpurchase->book->genre = addBookPurchase->genre;
-				cout << "Quantity" << endl;
-				cin >> newpurchase->book->quantity;
-				newpurchase->book->price = addBookPurchase->price;
-
-				cout << newpurchase->book->bookId << endl;
-				cout << newpurchase->book->bookTitle << endl;
-				cout << newpurchase->book->genre << endl;
-				cout << newpurchase->book->quantity << endl;
-				cout << newpurchase->book->price << endl;
-
-				//Maths
-				addBookPurchase->quantity = addBookPurchase->quantity - newpurchase->book->quantity;
-
-				cout << addBookPurchase->quantity;
-
-				while (newpurchase != NULL) {
-					cout << "___________________________________________________________________________________________________________\n";
-					cout << "  Purchase ID ||  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
-					cout << "-----------------------------------------------------------------------------------------------------------\n";
-
-					if (newpurchase->purchaseId == purchaseId) {
-
-						cout << "     " << newpurchase->purchaseId <<
-							"\t \t" << newpurchase->book->bookId <<
-							"\t \t" << newpurchase->book->bookTitle <<
-							"\t \t" << newpurchase->book->genre <<
-							"\t \t       " << newpurchase->book->quantity <<
-							"\t \t" << newpurchase->book->price << "  " << "\n";
-
-						
-						
-						newpurchase = newpurchase->pNext;
-					}
-					
-					
-					//removed break;
-					
-				}
-
-
-
-				
-				
-				
-			}
-
-			
-			
+	newpurchase = new Purchase();
+	while (newpurchase != NULL) {
 		
+		newpurchase->purchaseId = purchaseId;
+		newpurchase->book = new Book();
+		newpurchase->totalPrice = 12;
+
+		//Book
+		while (addBookPurchase != NULL) {
+
+				newpurchase->book->bookId = addBookPurchase->bookId;
+				newpurchase->book->bookTitle = addBookPurchase->bookTitle;
+				newpurchase->book->genre = addBookPurchase->genre;
+				cout << "Quantity" << endl;
+				cin >> newpurchase->book->quantity;
+				newpurchase->book->price = addBookPurchase->price;
+
+				addBookPurchase->quantity = addBookPurchase->quantity - newpurchase->book->quantity;
+
+				cout << "     " << newpurchase->purchaseId <<
+					"\t \t" << newpurchase->book->bookId <<
+					"\t \t" << newpurchase->book->bookTitle <<
+					"\t \t" << newpurchase->book->genre <<
+					"\t \t       " << newpurchase->book->quantity <<
+					"\t \t" << newpurchase->book->price << "  " << "\n";
+				break;
+		}
+		if (newpurchase->book->head == NULL) {
+			newpurchase->book->prev = NULL;
+			newpurchase->book->head = newpurchase->book;
+			newpurchase->book->tail = newpurchase->book;
+
+		}
+		else if (newpurchase->book->head != NULL) {
+			newpurchase->book->prev = tail;
+			newpurchase->book->tail->next = newpurchase->book;
+			newpurchase->book->tail = newpurchase->book;
+			newpurchase->book->tail->next = NULL;
 		}
 		
-		addBookPurchase = addBookPurchase->next;
-		
-	}
-	
-	
-	
-	
+		if (pHead == NULL) {
+			newpurchase->pPrev = NULL;
+			pHead = newpurchase;
+			pTail = newpurchase;
 
-	main();
+		}
+		else if (pHead != NULL) {
+			newpurchase->pPrev = pTail;
+			pTail->pNext = newpurchase;
+			pTail = newpurchase;
+			pTail->pNext = NULL;
+		}
+		cout << pHead;
+		break;
+	}
+
 }
+
+
 
 void displayallpurchase() {
 	
 	struct Purchase* newpurchase = pHead;
-
-	cout << newpurchase->book->bookId << endl;
-	cout << newpurchase->book->bookTitle << endl;
-	cout << newpurchase->book->genre << endl;
-	cout << newpurchase->book->quantity << endl;
-	cout << newpurchase->book->price << endl;
+	struct Book* newpurchasebook = newpurchase->book;
+	cout << newpurchasebook->bookId << endl;
+	cout << newpurchasebook->bookTitle << endl;
+	cout << newpurchasebook->genre << endl;
+	cout << newpurchasebook->quantity << endl;
+	cout << newpurchasebook->price << endl;
 
 
 	if (newpurchase == NULL) {
@@ -1003,13 +904,15 @@ int main() {
 		//Add Purchase
 		int decision = 1;
 		addnewpurchase();
-		
+		displayallpurchase();
+		main();
 		break;
 		}
 
 		{
 	case 9:
 		//Display All Purchases
+		
 		displayallpurchase();
 		break;
 		}
