@@ -776,11 +776,73 @@ void displayallpurchase() {
 
 
 void sortpurchase() {
+	struct Purchase* purchase = pHead;
 
+
+
+	int tmp;
+	string tempgenre, tempbookTitle;
+	float tempprice;
+
+	struct Purchase* current = NULL;
+	struct Purchase* index = NULL;
+
+	if (purchase == NULL && current == NULL && index == NULL) {
+		cout << "No records in the list!\n\n";
+		return;
+	}
+
+	//Bubble sort algo 
+	for (current = purchase; current->pNext != NULL; current = current->pNext) {
+		for (index = current->pNext; index != NULL; index = index->pNext) {
+			if (current->totalPrice > index->totalPrice) {
+
+				tmp = current->book->quantity;
+				current->book->quantity = index->book->quantity;
+				index->book->quantity = tmp;
+
+				tmp = current->book->bookId;
+				current->book->bookId = index->book->bookId;
+				index->book->bookId = tmp;
+
+				tempbookTitle = current->book->bookTitle;
+				current->book->bookTitle = index->book->bookTitle;
+				index->book->bookTitle = tempbookTitle;
+
+				tempprice = current->book->price;
+				current->book->price = index->book->price;
+				index->book->price = tempprice;
+
+				tempgenre = current->book->genre;
+				current->book->genre = index->book->genre;
+				index->book->genre = tempgenre;
+
+			}
+		}
+	}
+
+
+	cout << "___________________________________________________________________________________________\n";
+	cout << "  Book ID ||    Book Title    ||        Genre        ||     Quantity     ||     Price    ||\n";
+	cout << "-------------------------------------------------------------------------------------------\n";
+	while (purchase != NULL) {
+
+		cout << "     " << purchase->purchaseId <<
+			"\t \t" << purchase->book->bookId <<
+			"\t \t" << purchase->book->bookTitle <<
+			"\t \t" << purchase->book->genre <<
+			"\t \t       " << purchase->book->quantity <<
+			"\t \t" << purchase->book->price << "  " << "\n";
+		purchase = purchase->pNext;
+
+	}
+
+	cout << endl;
 }
 
 void displaypurchase(/* Purchase purchase */) {
 
+	
 }
 
 void Menu() {
@@ -795,8 +857,8 @@ void Menu() {
 	cout << "5. Update book" << endl;//
 	cout << "6. Sort by quantity" << endl;//
 	cout << "7. Delete book" << endl;//
-	cout << "8. Add New Purchase" << endl;
-	cout << "9. Display All Purchase" << endl;
+	cout << "8. Add New Purchase" << endl;//
+	cout << "9. Display All Purchase" << endl;//
 	cout << "10. Sort Purchase" << endl;
 	cout << "11. Display Specific Purchase by ID\n\n" << endl;
 
